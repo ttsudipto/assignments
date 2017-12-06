@@ -31,6 +31,9 @@ hs_err_pid*
 *.exe
 *.out
 
+IP/*.png
+IP/*.jpeg
+
 .directory
 /build/
 /dist/
