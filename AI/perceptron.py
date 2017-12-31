@@ -1,3 +1,5 @@
+import csv
+
 def net_input(x, w) :
     sum = 0
     for i in range(len(w)) :
@@ -12,18 +14,21 @@ def output_activation(y, b) :  # uses a step function
     else :
         return 0
 
-def percepton_learning(bias) :
+def percepton_learning(bias, filename) :
+    input_file_obj = open(filename)
+    reader = csv.reader(input_file_obj, delimiter=' ')
+    
     # 'n' is the size of training pairs.
-    n = int(raw_input("Size of training set : "))
+    n = int(reader.next()[0])
     # 'm' is the size of input set.
-    m = int(raw_input("Size of input set : "))
+    m = int(reader.next()[0])
     
     # 'input_matrix' is a (n)x(m+1) matrix
-    print("Enter input matrix : ")
     input_matrix = []
     for i in range(n) :
         while(True) :
-            input_vector = [int(x) for x in raw_input().split(' ')]
+            #input_vector = [int(x) for x in raw_input().split(' ')]
+            input_vector = [int(x) for x in reader.next()]
             if len(input_vector) == m :
                 break
             else :
@@ -31,10 +36,10 @@ def percepton_learning(bias) :
         input_matrix.append([bias] + input_vector)
     
     # 'output_vector' is a n-dimensional vector
-    print("Enter output vector : ")
     output_vector = []
     for i in range(n) :
-        output_vector.append(int(raw_input()))
+        output_vector.append(int(reader.next()[0]))
+        #output_vector.append(int(raw_input()))
     
     weight_vector = [0] * (m+1)
     rate = 0.5
@@ -63,8 +68,10 @@ def test(x, w, b) :
     return y_out
 
 bias = 1
-weight = percepton_learning(bias)
-print(weight)
+print('Training the perceptron ...')
+weight = percepton_learning(bias, 'perceptron_input.csv')
+print("weight vector = {!r}".format(weight))
+print('Training complete.')
 o1 = test([-1, -1, 1], weight, bias)
 o2 = test([1, 1, 1], weight, bias)
 print(o1, o2)
