@@ -1,5 +1,3 @@
-import java.sql.Driver;
-
 class Main {
     public static void main(String[] args) {
 
