@@ -10,6 +10,7 @@ class MainWindow extends JFrame implements ActionListener, ItemListener {
 //    private Data data;
     private EventDispatcher dispatcher;
     private JCheckBox arguement;
+    JTextField orderField, sizeField;
     private Data.GraphicsPanel graphicsPanel;
 
     public MainWindow(Data.GraphicsPanel gPanel, EventDispatcher e) {
@@ -46,13 +47,29 @@ class MainWindow extends JFrame implements ActionListener, ItemListener {
         arguementHull.setActionCommand("b3");
         arguementHull.addActionListener(this);
         buttonPanel.add(arguementHull);
+        arguement = new JCheckBox("Arguement Point");
+        arguement.addItemListener(this);
+        buttonPanel.add(arguement);
         JButton closestPairButton = new JButton("Closest Pair");// Closest Pair button
         closestPairButton.setActionCommand("b4");
         closestPairButton.addActionListener(this);
         buttonPanel.add(closestPairButton);
-        arguement = new JCheckBox("Arguement Point");
-        arguement.addItemListener(this);
-        buttonPanel.add(arguement);
+        buttonPanel.add(new JLabel("Order: "));
+        orderField = new JTextField("0", 3);
+        orderField.setHorizontalAlignment(JTextField.CENTER);
+        buttonPanel.add(orderField);
+        buttonPanel.add(new JLabel("Size; "));
+        sizeField = new JTextField("0", 3);
+        sizeField.setHorizontalAlignment(JTextField.CENTER);
+        buttonPanel.add(sizeField);
+        JButton connectedGraphButton = new JButton("Connected Graph");
+        connectedGraphButton.setActionCommand("b5");
+        connectedGraphButton.addActionListener(this);
+        buttonPanel.add(connectedGraphButton);
+        JButton hamiltonianGraphButton = new JButton("Hamiltonian Graph");
+        hamiltonianGraphButton.setActionCommand("b6");
+        hamiltonianGraphButton.addActionListener(this);
+        buttonPanel.add(hamiltonianGraphButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -83,6 +100,18 @@ class MainWindow extends JFrame implements ActionListener, ItemListener {
         else if(e.getActionCommand().equals("b4")) {
             dispatcher.setOperationType(4);
             System.out.println("b4 clicked");
+        }
+        else if(e.getActionCommand().equals("b5")) {
+            dispatcher.setParameters(Integer.parseInt(orderField.getText()),
+                    Integer.parseInt(sizeField.getText()));
+            dispatcher.setOperationType(5);
+            System.out.println("b5 clicked");
+        }
+        else if(e.getActionCommand().equals("b6")) {
+            dispatcher.setParameters(Integer.parseInt(orderField.getText()),
+                    Integer.parseInt(sizeField.getText()));
+            dispatcher.setOperationType(6);
+            System.out.println("b6 clicked");
         }
         new Thread(dispatcher).start();
     }

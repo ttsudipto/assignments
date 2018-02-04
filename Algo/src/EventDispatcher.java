@@ -6,7 +6,7 @@ class EventDispatcher implements Runnable {
 
     private Data data;
 //    private Algorithms algorithms;
-    private int operationType;
+    private int operationType, order, size;
 
     public EventDispatcher(Data d) {
         data = d;
@@ -14,6 +14,10 @@ class EventDispatcher implements Runnable {
     }
 
     public void setOperationType(int t) { operationType = t; }
+    public void setParameters(int o, int s) {
+        order = o;
+        size = s;
+    }
 
     @Override
     public void run() {
@@ -85,10 +89,40 @@ class EventDispatcher implements Runnable {
                 }
                 break;
             case 4 : // closest pair
-                data.setClosestPair(ClosestPair.findClosestPair(data.getPoints()));
+                data.setClosestPair(ClosestPair.findClosestPair(data.getPoints(), data.getGraphicsPanel()));
                 data.getGraphicsPanel().setDrawPtFlag(true);
                 data.getGraphicsPanel().setClosestPairFlag(true);
                 data.getGraphicsPanel().repaint();
+                break;
+            case 5 : // connected graph
+                try {
+                    data.setGraph(GraphGenerators.generateRandomConnectedGraph(order, size));
+                    data.getGraphicsPanel().setDrawGraphFlag(true);
+                    data.getGraphicsPanel().repaint();
+                    data.getGraph().print();
+                } catch (IllegalArgumentException e) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JOptionPane.showMessageDialog(null, e.getMessage(), "Error!!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }).start();
+                }
+                break;
+            case 6 : // hamiltonian graph
+                try {
+                    data.setGraph(GraphGenerators.generateRandomHamiltonianGraph(order, size));
+                    data.getGraphicsPanel().setDrawGraphFlag(true);
+                    data.getGraphicsPanel().repaint();
+                    data.getGraph().print();
+                } catch (IllegalArgumentException e) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            JOptionPane.showMessageDialog(null, e.getMessage(), "Error!!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }).start();
+                }
                 break;
             default:
                 System.out.println("Type = " + operationType);

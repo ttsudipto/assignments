@@ -113,7 +113,7 @@ class ClosestPair {
         return minDistancePair;
     }
 
-    public static Data.PointPair findClosestPair(Vector<Point> points) {
+    public static Data.PointPair findClosestPair(Vector<Point> points, Data.GraphicsPanel panel) {
         points.sort(xComparator);
         return recClosestPair(points, 0, points.size()-1);
     }
