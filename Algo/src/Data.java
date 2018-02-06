@@ -72,8 +72,12 @@ class Data {
         private boolean hullPaintFlag;
         private boolean closestPairFlag;
         private boolean drawGraphFlag;
+        private boolean drawLineFlag;
 
         private boolean isArguementPoint;
+
+        private Vector<Point> lines;
+        private Vector<Color> colors;
 
         public GraphicsPanel() {
             super();
@@ -81,7 +85,10 @@ class Data {
             hullPaintFlag = false;
             closestPairFlag = false;
             drawGraphFlag = false;
+            drawLineFlag = false;
             isArguementPoint = false;
+            lines = new Vector<>();
+            colors = new Vector<>();
             setMinimumSize(new Dimension(500,450));
             setBackground(Color.WHITE);
             addMouseListener(new MouseAdapter() {
@@ -119,6 +126,18 @@ class Data {
                         hull.get(i).y,
                         hull.get(i+1).x,
                         hull.get(i+1).y
+                );
+            }
+        }
+
+        private void drawLines(Graphics graphics) {
+            for(int i=0, j=0; i<lines.size(); i=i+2, ++j) {
+                graphics.setColor(colors.elementAt(j));
+                graphics.drawLine(
+                        lines.elementAt(i).x,
+                        lines.elementAt(i).y,
+                        lines.elementAt(i+1).x,
+                        lines.elementAt(i+1).y
                 );
             }
         }
@@ -169,7 +188,11 @@ class Data {
         public void setDrawPtFlag(boolean b) { drawPtFlag = b; }
         public void setClosestPairFlag(boolean b) { closestPairFlag = b; }
         public void setDrawGraphFlag(boolean b) { drawGraphFlag = b; }
+        public void setDrawLineFlag(boolean b) { drawLineFlag = b; }
         public void setIsArguementPoint(boolean b) { isArguementPoint = b; }
+
+        public void setLines(Vector<Point> v) { lines = v; }
+        public void setColors(Vector<Color> c) { colors = c; }
 
         @Override
         public void paintComponent(Graphics graphics) {
@@ -191,7 +214,10 @@ class Data {
                 drawGraph(graphics);
                 drawPtFlag = false;
             }
-
+            if(drawLineFlag) {
+                drawLines(graphics);
+                drawLineFlag = false;
+            }
         }
 
     }
