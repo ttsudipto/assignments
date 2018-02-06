@@ -15,7 +15,7 @@ class GraphGenerators {
     }
 
     public static Data.Graph generateRandomConnectedGraph(int order, int size) {
-        if(order<0 && size<order-1)
+        if(order<0 || size<order-1  || size>(order*(order-1)/2))
             throw new IllegalArgumentException("ERROR: ...invalid parameters");
         Data.Graph graph = new Data.Graph(order);
         Random random = new Random();
@@ -33,7 +33,7 @@ class GraphGenerators {
     }
 
     public static Data.Graph generateRandomHamiltonianGraph(int order, int size) {
-        if(order<0 && size<order)
+        if(order<0 || size<order || size>(order*(order-1)/2))
             throw new IllegalArgumentException("ERROR: ...invalid parameters");
         Data.Graph graph = new Data.Graph(order);
         Random random = new Random();
