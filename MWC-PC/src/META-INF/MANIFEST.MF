@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: gson-2.8.1-SNAPSHOT.jar jogl-all.jar gluegen-rt.jar jogamp
+ -fat.jar bcprov-jdk15on-155.jar bcpkix-jdk15on-155.jar commons-codec-
+ 1.10.jar
+Main-Class: project.pc.Main
+
