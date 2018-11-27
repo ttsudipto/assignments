@@ -24,7 +24,6 @@ class Network :
         self.topology = [int(x) for x in self.reader.next()]
         self.n_layers = len(self.topology)
     
-        #self.network_structure = []
         temp = 0
         for i in range(len(self.topology)) :
             t_vector = []
@@ -34,16 +33,15 @@ class Network :
             self.network_structure.append(t_vector)
         self.n_neurons = temp
     
-        #self.weight_matrix = []
         for k in range(len(self.topology)-1) :
             for i in range(len(self.network_structure[k])) :
                 t_dict = dict()
                 for j in self.network_structure[k+1] :
-                    t_dict[j] = random.uniform(-1, 1)
+                    t_dict[j] = random.uniform(-0.5, 0.5)
                 self.weight_matrix.append(t_dict)
                 
         for i in range(self.n_neurons) :
-            self.bias_vector.append(random.uniform(-1, 1))
+            self.bias_vector.append(random.uniform(-0.5, 0.5))
     
     def acquire_training_data(self) :
         n = int(self.reader.next()[0])
@@ -88,7 +86,7 @@ class Network :
                 for i in range(len(self.weight_matrix)) :
                     for j,w in self.weight_matrix[i].items() :
                         del_weight = rate * err_vector[j] * o_vector[i]
-                        #print([i, j, del_weight, w + del_weight])
+                        #print([i, j, del_weight, w, w + del_weight])
                         self.weight_matrix[i][j] = w + del_weight
                 # Modify bias
                 for i in range(self.n_neurons) :
@@ -103,6 +101,8 @@ class Network :
                     condition = condition & (self.output_matrix[sample_no][k] == o_vector[i])
                     k = k + 1
                 if ((counter == 100000) or condition) :
+                    #print([o_vector, self.output_matrix[sample_no][0]])
+                    #print(err_vector)
                     terminate = True
             
         
@@ -111,6 +111,7 @@ class Network :
         print(self.topology)
         print(self.network_structure)
         print(self.weight_matrix)
+        print(self.bias_vector)
         print(self.input_matrix)
         print(self.output_matrix)
 
