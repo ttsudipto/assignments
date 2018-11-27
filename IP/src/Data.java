@@ -49,7 +49,7 @@ class Data {
                     System.out.println("Unable to read file");
             }
             inputImage = inputImages[0];
-            System.out.println(inputImages.length);
+//            System.out.println(inputImages.length);
         } catch(IllegalArgumentException e1) {
             System.out.println("Invalid filename !!!");
         } catch (IOException e2) {
@@ -84,6 +84,17 @@ class Data {
                     outputImage,
                     outputFilename.substring(outputFilename.lastIndexOf('.')+1),
                     new File(outputFilename)
+            );
+        } catch (IOException e) {
+            System.out.println("Error during write !!!");
+        }
+    }
+    public static void writeImageFile(BufferedImage outputImage, String title) {
+        try {
+            ImageIO.write(
+                    outputImage,
+                    outputFilename.substring(outputFilename.lastIndexOf('.')+1),
+                    new File(title)
             );
         } catch (IOException e) {
             System.out.println("Error during write !!!");

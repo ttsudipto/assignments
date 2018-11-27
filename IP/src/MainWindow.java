@@ -14,7 +14,7 @@ class MainWindow extends JFrame implements ActionListener {
 
     private JFileChooser fc;
     private JButton selectButton, zoomButton, shrinkButton, filterButton, histogramButton;
-    private JTextField factorFeildX, factorFeildY;
+    private JTextField factorFeildX, factorFeildY, nImagesField;
     private File[] files;
     private String factor;
     private Data data;
@@ -29,10 +29,11 @@ class MainWindow extends JFrame implements ActionListener {
         JLabel label1 = new JLabel("Scaling factor : ");
         JLabel label2 = new JLabel("X");
         JLabel label3 = new JLabel("Y");
+        JLabel label4 = new JLabel("#");
 
         setTitle("Image Processing Assignment");
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(640,120));
+        setMinimumSize(new Dimension(720,120));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -58,6 +59,8 @@ class MainWindow extends JFrame implements ActionListener {
         factorFeildX.setHorizontalAlignment(JTextField.CENTER);
         factorFeildY = new JTextField("1", 3);
         factorFeildY.setHorizontalAlignment(JTextField.CENTER);
+        nImagesField = new JTextField("1", 3);
+        nImagesField.setHorizontalAlignment(JTextField.CENTER);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(label1);
@@ -67,6 +70,8 @@ class MainWindow extends JFrame implements ActionListener {
         buttonPanel.add(factorFeildY);
         buttonPanel.add(zoomButton);
         buttonPanel.add(shrinkButton);
+        buttonPanel.add(label4);
+        buttonPanel.add(nImagesField);
         buttonPanel.add(filterButton);
         buttonPanel.add(histogramButton);
         add(selectButton, BorderLayout.NORTH);
@@ -110,7 +115,7 @@ class MainWindow extends JFrame implements ActionListener {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            displayImage("Output", ZoomAndShrink.zoom(data.getInputImage(), sx, sy));
+                            displayImage("Output", ZoomAndShrink.zoom2(data.getInputImage(), sx, sy));
                         }
                     }).start();
                 }
@@ -136,7 +141,9 @@ class MainWindow extends JFrame implements ActionListener {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        displayImage("Output", NoiseRemoval.removeNoise(data.getInputImages()));
+//                        displayImage("Output", NoiseRemoval.removeNoise(data.getInputImages()));
+                        int n = Integer.parseInt(nImagesField.getText());
+                        displayImage("Output", NoiseRemoval.addNoise(data.getInputImage(),n));
                     }
                 }).start();
             }
@@ -145,7 +152,9 @@ class MainWindow extends JFrame implements ActionListener {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+
                         displayImage("Output", Histogram.equalize(data.getInputImage()));
+//                        Histogram.equalize(data.getInputImage());
                     }
                 }).start();
             }

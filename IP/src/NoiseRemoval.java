@@ -1,5 +1,6 @@
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.util.Random;
 
 /**
  * Class that contains the method for noise removal.
@@ -24,8 +25,8 @@ class NoiseRemoval {
         BufferedImage outputImage = new BufferedImage(
                 images[0].getWidth(),
                 images[0].getHeight(),
-//                images[0].getType()
-                BufferedImage.TYPE_BYTE_GRAY
+                images[0].getType()
+//                BufferedImage.TYPE_BYTE_GRAY
         );
 
         int width = outputImage.getWidth();
@@ -56,4 +57,39 @@ class NoiseRemoval {
         Data.writeImageFile(outputImage);
         return outputImage;
     }
+
+    public static BufferedImage addNoise(BufferedImage inputImage, int n) {
+        int numComponents = inputImage.getColorModel().getNumComponents();
+        WritableRaster inputRaster = inputImage.getRaster();
+        BufferedImage[] images = new BufferedImage[n];
+
+        for(int k=0;k<n;++k) {
+            BufferedImage outputImage = new BufferedImage(
+                    inputImage.getWidth(),
+                    inputImage.getHeight(),
+                inputImage.getType()
+//                    BufferedImage.TYPE_BYTE_GRAY
+            );
+            Random random = new Random();
+            WritableRaster outputRaster = outputImage.getRaster();
+            for (int i = 0; i < inputImage.getWidth(); ++i)
+                for (int j = 0; j < inputImage.getHeight(); ++j) {
+                    int[] pixel = inputRaster.getPixel(i, j, new int[numComponents]);
+                    int flag = random.nextInt(6);
+                    if (flag % 2 == 0) {
+                        if (pixel[0] < 50)
+                            pixel[0] = 0;
+                        else if (pixel[0] > 205)
+                            pixel[0] = 255;
+                    }
+                    outputRaster.setPixel(i, j, pixel);
+                }
+            outputImage.setData(outputRaster);
+            Data.writeImageFile(outputImage, Integer.toString(k+1) + ".jpg");
+            images[k] = outputImage;
+        }
+
+        return removeNoise(images);
+    }
+
 }

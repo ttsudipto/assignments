@@ -1,5 +1,9 @@
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.util.HashMap;
+import java.util.Vector;
 
 /**
  * Class that contains the method for histogram equalization.
@@ -12,6 +16,7 @@ class Histogram {
      * @return the histogram equalized image
      */
     public static BufferedImage equalize(BufferedImage inputImage) {
+
         BufferedImage outputImage = new BufferedImage(
                 inputImage.getWidth(),
                 inputImage.getHeight(),
@@ -59,8 +64,41 @@ class Histogram {
 
         outputImage.setData(outputRaster);
 
-        Data.writeImageFile(outputImage);
+//        Data.writeImageFile(outputImage);
 
+        plotHist(inputImage, "Input Histogram");
+        plotHist(outputImage, "Output Histogram");
         return outputImage;
+    }
+
+    public static void plotHist(BufferedImage image, String title) {
+        Vector<Integer> x = new Vector<>();
+        Vector<Integer> y = new Vector<>();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        WritableRaster inputRaster = image.getRaster();
+        int noOfIntensities = (int) (Math.pow(2, image.getColorModel().getPixelSize()));
+        int pdf[] = new int[noOfIntensities];
+
+        for(int i=0; i<width; ++i)
+            for(int j=0; j<height; ++j) {
+                int[] intensity = inputRaster.getPixel(i, j, new int[3]);
+                pdf[intensity[0]]++;
+            }
+
+//        for( int i : pdf)
+//            System.out.println(i);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JFrame window = new JFrame(title);
+                window.setSize(new Dimension(800, 400));
+                ImagePanel panel = new ImagePanel(pdf, width*height);
+                window.add(panel);
+                window.setResizable(false);
+                window.setVisible(true);
+            }
+        }).start();
     }
 }
